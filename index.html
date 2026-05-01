@@ -2,109 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUSK AL QASAR - Luxury Perfumes</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #fafafa; }
-  .topbar { background: #000; color: white; padding: 8px 4%; font-size: 13px; }
-  .header { background: white; padding: 15px 4%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 999; }
-  .logo { height: 50px; }
-  .header-right { display: flex; gap: 20px; align-items: center; }
-  .dropdown { position: relative; }
-  .dropdown-btn { background: none; border: none; cursor: pointer; padding: 8px 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-  .dropdown-content { display: none; position: absolute; background: white; min-width: 280px; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 999; right: 0; border-radius: 8px; margin-top: 5px; }
-  .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-  .dropdown-content a:hover { background: #f8f8f8; }
-  .show { display: block; }
-  .disabled { opacity: 0.4; cursor: not-allowed; }
-  .search-section { background: #f5f5f5; padding: 20px 4%; }
-  .search-box { max-width: 600px; margin: 0 auto; position: relative; }
-  .search-box input { width: 100%; padding: 14px 50px 14px 20px; border: 2px solid #b8860b; border-radius: 30px; font-size: 15px; }
-  .search-box i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #b8860b; }
-  .container { max-width: 1300px; margin: 30px auto; padding: 0 4%; }
-  .section-title { font-size: 28px; color: #222; margin: 30px 0 20px; }
-  .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-  .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
-  .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-  .product-img { width: 100%; height: 280px; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); display: flex; align-items: center; justify-content: center; position: relative; }
-  .product-img img { width: 60%; height: auto; object-fit: contain; }
-  .sale-badge { position: absolute; top: 15px; left: 15px; background: #b8860b; color: white; padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; }
-  .wishlist { position: absolute; top: 15px; right: 15px; background: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-  .product-info { padding: 20px; }
-  .product-name { font-size: 18px; font-weight: 600; color: #222; margin-bottom: 8px; }
-  .product-desc { font-size: 13px; color: #777; margin-bottom: 12px; }
-  .price { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-  .price-new { font-size: 22px; font-weight: bold; color: #b8860b; }
-  .price-old { font-size: 16px; color: #999; text-decoration: line-through; }
-  .size-options { display: flex; gap: 8px; margin-bottom: 15px; }
-  .size-btn { padding: 6px 14px; border: 1px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-size: 13px; }
-  .size-btn.active { background: #b8860b; color: white; border-color: #b8860b; }
-  .add-cart-btn { width: 100%; padding: 12px; background: #b8860b; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-  .add-cart-btn:hover { background: #9a7209; }
-  .cart-section { max-width: 600px; margin: 50px auto; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-  .cart-items { margin: 20px 0; }
-  .cart-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
-  .footer { background: #1a1a1a; color: #aaa; text-align: center; padding: 40px 20px; margin-top: 60px; }
-    @media (max-width: 768px) {
-    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .header { flex-wrap: wrap; }
-    .header-right { width: 100%; justify-content: space-between; margin-top: 10px; }
-    }
-    @media (max-width: 480px) {
-    .product-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
 
-  <div class="topbar">
-    <span data-lang="freeshipping">Free Delivery across Pakistan</span>
-  </div>
-
-  <div class="header">
-    <img src="logo.png" alt="MUSK AL QASAR" class="logo">
-    <div class="header-right">
-      <div class="dropdown">
-        <button class="dropdown-btn" onclick="toggleDropdown('countryDropdown')">
-          <img src="https://flagcdn.com/w20/pk.png" width="20" alt="PK"> <span id="currentCountry">Pakistan</span> <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
-        </button>
-        <div id="countryDropdown" class="dropdown-content">
-          <a href="#" onclick="selectCountry('pk', 'Pakistan', true)"><img src="https://flagcdn.com/w20/pk.png" width="20"> Pakistan</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/af.png" width="20"> Afghanistan - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/al.png" width="20"> Albania - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/dz.png" width="20"> Algeria - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/as.png" width="20"> American Samoa - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ad.png" width="20"> Andorra - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ao.png" width="20"> Angola - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ag.png" width="20"> Antigua and Barbuda - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ar.png" width="20"> Argentina - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/am.png" width="20"> Armenia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/au.png" width="20"> Australia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/at.png" width="20"> Austria - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/az.png" width="20"> Azerbaijan - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/bh.png" width="20"> Bahrain - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/bd.png" width="20"> Bangladesh - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/by.png" width="20"> Belarus - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/be.png" width="20"> Belgium - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/br.png" width="20"> Brazil - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/bg.png" width="20"> Bulgaria - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ca.png" width="20"> Canada - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/cn.png" width="20"> China - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/co.png" width="20"> Colombia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/hr.png" width="20"> Croatia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/cz.png" width="20"> Czech Republic - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/dk.png" width="20"> Denmark - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/eg.png" width="20"> Egypt - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/fi.png" width="20"> Finland - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/fr.png" width="20"> France - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/de.png" width="20"> Germany - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/gr.png" width="20"> Greece - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/hk.png" width="20"> Hong Kong - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/hu.png" width="20"> Hungary - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/is.png" width="20"> Iceland - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/in.png" width="20"> India - Coming Soon</a>
           <a href="#" class="disabled"><img src="https://flagcdn.com/w20/id.png" width="20"> Indonesia - Coming Soon</a>
           <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ir.png" width="20"> Iran - Coming Soon</a>
           <a href="#" class="disabled"><img src="https://flagcdn.com/w20/iq.png" width="20"> Iraq - Coming Soon</a>
@@ -155,3 +53,4 @@
         </button>
         <div id="langDropdown" class="dropdown-content">
           <a
+            
