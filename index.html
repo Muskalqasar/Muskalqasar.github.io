@@ -1,57 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
+<!DOCTYPE html>  <html>  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>MUSK AL QASAR</title>  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>  <style>  
+body{margin:0;font-family:sans-serif;background:#0b0b0b;color:#fff}  
+.header{background:#000;padding:15px;display:flex;justify-content:space-between;align-items:center}  
+.gold{color:#b8860b}  
+.btn{background:#b8860b;color:#000;padding:8px;border:none;cursor:pointer;margin:2px}  
+.box{background:#111;margin:10px;padding:15px;border-radius:10px}  
+input,textarea{width:100%;padding:8px;margin:5px 0;background:#000;color:#fff;border:1px solid #333}  
+.hidden{display:none}  
+.product{border-bottom:1px solid #333;padding:10px 0}  
+</style>  </head>  <body>  <div class="header">  
+<h2 class="gold">MUSK AL QASAR</h2>  
+<div>  
+<button class="btn" onclick="lang('en')">EN</button>  
+<button class="btn" onclick="lang('ur')">UR</button>  
+<button class="btn" onclick="openAdmin()">ADMIN</button>  
+</div>  
+</div>  <!-- PRODUCTS -->  <div class="box">  
+<div class="product">  
+<h3>Oud Royal - Rs 2500</h3>  
+<button class="btn" onclick="add('Oud Royal',2500)">Add</button>  
+</div>  <div class="product">  
+<h3>Musk Gold - Rs 1800</h3>  
+<button class="btn" onclick="add('Musk Gold',1800)">Add</button>  
+</div>  
+</div>  <!-- CART -->  <div class="box">  
+<h3 id="cartTitle">Cart</h3>  
+<div id="cart"></div>  
+<h3 id="total"></h3>  <input id="name" placeholder="Name">  
+<input id="phone" placeholder="Phone">  
+<textarea id="address" placeholder="Address"></textarea>  <button class="btn" onclick="order()">Cash on Delivery</button>
 
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/id.png" width="20"> Indonesia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ir.png" width="20"> Iran - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/iq.png" width="20"> Iraq - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ie.png" width="20"> Ireland - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/it.png" width="20"> Italy - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/jp.png" width="20"> Japan - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/jo.png" width="20"> Jordan - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/kz.png" width="20"> Kazakhstan - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ke.png" width="20"> Kenya - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/kw.png" width="20"> Kuwait - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/lb.png" width="20"> Lebanon - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/my.png" width="20"> Malaysia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/mv.png" width="20"> Maldives - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/mx.png" width="20"> Mexico - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ma.png" width="20"> Morocco - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/np.png" width="20"> Nepal - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/nl.png" width="20"> Netherlands - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/nz.png" width="20"> New Zealand - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ng.png" width="20"> Nigeria - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/no.png" width="20"> Norway - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/om.png" width="20"> Oman - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ph.png" width="20"> Philippines - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/pl.png" width="20"> Poland - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/pt.png" width="20"> Portugal - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/qa.png" width="20"> Qatar - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ro.png" width="20"> Romania - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ru.png" width="20"> Russia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/sa.png" width="20"> Saudi Arabia - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/sg.png" width="20"> Singapore - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/za.png" width="20"> South Africa - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/kr.png" width="20"> South Korea - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/es.png" width="20"> Spain - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/lk.png" width="20"> Sri Lanka - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/se.png" width="20"> Sweden - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ch.png" width="20"> Switzerland - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/th.png" width="20"> Thailand - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/tr.png" width="20"> Turkey - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ae.png" width="20"> UAE - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/gb.png" width="20"> United Kingdom - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/us.png" width="20"> United States - Coming Soon</a>
-          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/vn.png" width="20"> Vietnam - Coming Soon</a>
-        </div>
-      </div>
-
-      <div class="dropdown">
-        <button class="dropdown-btn" onclick="toggleDropdown('langDropdown')">
-          <i class="fas fa-globe"></i> <span id="currentLang">English</span> <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
-        </button>
-        <div id="langDropdown" class="dropdown-content">
-          <a
-
+</div>  <!-- LOGIN -->  <div id="login" class="box hidden">  
+<h3>Admin Login</h3>  
+<input id="pass" placeholder="Password">  
+<button class="btn" onclick="login()">Login</button>  
+</div>  <!-- ADMIN -->  <div id="admin" class="box hidden">  
+<h3>LIVE ORDERS</h3>  
+<div id="orders"></div>  
+</div>  <script>  
   
+// ================= FIREBASE =================  
+const firebaseConfig = {  
+apiKey: "YOUR_KEY",  
+authDomain: "YOUR_DOMAIN",  
+projectId: "YOUR_ID"  
+};  
+  
+firebase.initializeApp(firebaseConfig);  
+const db = firebase.firestore();  
+  
+// ================= SECURITY =================  
+const ADMIN_PASS = "1234";  
+  
+// ================= CART =================  
+let cart=[];  
+  
+function add(n,p){  
+let f=cart.find(x=>x.name===n);  
+if(f){f.qty++}else{cart.push({name:n,price:p,qty:1})}  
+render();  
+}  
+  
+function change(n,v){  
+let f=cart.find(x=>x.name===n);  
+f.qty+=v;  
+if(f.qty<=0) cart=cart.filter(x=>x.name!==n);  
+render();  
+}  
+  
+function render(){  
+let h=""; let t=0;  
+  
+cart.forEach(x=>{  
+t+=x.price*x.qty;  
+h+=`  
+<div>  
+${x.name} x${x.qty}  
+<button onclick="change('${x.name}',-1)">-</button>  
+<button onclick="change('${x.name}',1)">+</button>  
+</div>`;  
+});  
+  
+cartDiv.innerHTML=h;  
+total.innerText="Total: Rs "+t;  
+}  
+  
+// ================= ORDER =================  
+function order(){  
+  
+let name=name.value;  
+let phone=phone.value;  
+let address=address.value;  
+  
+if(!name||!phone||!address||cart.length===0){  
+alert("Fill all fields");  
+return;  
+}  
+  
+db.collection("orders").add({  
+name,phone,address,  
+cart,  
+status:"Pending",  
+time:Date.now()  
+});  
+  
+alert("Order Placed (COD)");  
+  
+cart=[];  
+render();  
+}  
+  
+// ================= ADMIN =================  
+function openAdmin(){  
+login.classList.remove("hidden");  
+}  
+  
+function login(){  
+if(pass.value===ADMIN_PASS){  
+login.classList.add("hidden");  
+admin.classList.remove("hidden");  
+loadOrders();  
+}else{  
+alert("Wrong password");  
+}  
+}  
+  
+function loadOrders(){  
+  
+db.collection("orders").orderBy("time","desc")  
+.onSnapshot(snap=>{  
+  
+let h="";  
+  
+snap.forEach(doc=>{  
+let o=doc.data();  
+  
+let items="";  
+o.cart.forEach(i=>{  
+items+=i.name+" x"+i.qty+"<br>";  
+});  
+  
+h+=`  
+<div class="box">  
+<b>${o.name}</b><br>  
+${o.phone}<br>  
+${o.address}<br><br>  
+${items}  
+Status: ${o.status}<br>  
+</div>  
+`;  
+});  
+  
+orders.innerHTML=h;  
+  
+});  
+}  
+  
+// ================= LANGUAGE =================  
+function lang(l){  
+if(l==="ur"){  
+cartTitle.innerText="ٹوکری";  
+}else{  
+cartTitle.innerText="Cart";  
+}  
+}  
+  
+</script>  </body>  
+</html>
