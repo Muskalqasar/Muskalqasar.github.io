@@ -1,171 +1,323 @@
-<!DOCTYPE html>  <html>  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>MUSK AL QASAR</title>  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>  <style>  
-body{margin:0;font-family:sans-serif;background:#0b0b0b;color:#fff}  
-.header{background:#000;padding:15px;display:flex;justify-content:space-between;align-items:center}  
-.gold{color:#b8860b}  
-.btn{background:#b8860b;color:#000;padding:8px;border:none;cursor:pointer;margin:2px}  
-.box{background:#111;margin:10px;padding:15px;border-radius:10px}  
-input,textarea{width:100%;padding:8px;margin:5px 0;background:#000;color:#fff;border:1px solid #333}  
-.hidden{display:none}  
-.product{border-bottom:1px solid #333;padding:10px 0}  
-</style>  </head>  <body>  <div class="header">  
-<h2 class="gold">MUSK AL QASAR</h2>  
-<div>  
-<button class="btn" onclick="lang('en')">EN</button>  
-<button class="btn" onclick="lang('ur')">UR</button>  
-<button class="btn" onclick="openAdmin()">ADMIN</button>  
-</div>  
-</div>  <!-- PRODUCTS -->  <div class="box">  
-<div class="product">  
-<h3>Oud Royal - Rs 2500</h3>  
-<button class="btn" onclick="add('Oud Royal',2500)">Add</button>  
-</div>  <div class="product">  
-<h3>Musk Gold - Rs 1800</h3>  
-<button class="btn" onclick="add('Musk Gold',1800)">Add</button>  
-</div>  
-</div>  <!-- CART -->  <div class="box">  
-<h3 id="cartTitle">Cart</h3>  
-<div id="cart"></div>  
-<h3 id="total"></h3>  <input id="name" placeholder="Name">  
-<input id="phone" placeholder="Phone">  
-<textarea id="address" placeholder="Address"></textarea>  <button class="btn" onclick="order()">Cash on Delivery</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MUSK AL QASAR - Luxury Perfumes</title>
+  <meta name="description" content="MUSK AL QASAR - Premium Oud & Luxury Perfumes. Free delivery across Pakistan.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root { --gold: #b8860b; --black: #1a1a1a; --white: #ffffff; --gray: #f5f5f5; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #fafafa; color: #222; }
+   .topbar { background: var(--black); color: var(--white); padding: 8px 4%; font-size: 13px; text-align: center; }
+   .header { background: var(--white); padding: 15px 4%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 999; }
+   .logo { height: 50px; }
+   .header-right { display: flex; gap: 15px; align-items: center; }
+   .dropdown { position: relative; }
+   .dropdown-btn { background: none; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; padding: 8px 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+   .dropdown-content { display: none; position: absolute; background: var(--white); min-width: 280px; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 999; right: 0; border-radius: 8px; margin-top: 5px; }
+   .dropdown-content a { color: #333; padding: 10px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+   .dropdown-content a:hover { background: var(--gray); }
+   .show { display: block; }
+   .disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+   .search-section { background: var(--gray); padding: 20px 4%; }
+   .search-box { max-width: 600px; margin: 0 auto; position: relative; }
+   .search-box input { width: 100%; padding: 14px 50px 14px 20px; border: 2px solid var(--gold); border-radius: 30px; font-size: 15px; }
+   .search-box i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+   .container { max-width: 1300px; margin: 30px auto; padding: 0 4%; }
+   .section-title { font-size: 28px; color: #222; margin: 30px 0 20px; font-weight: 600; }
+   .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+   .product-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
+   .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+   .product-img { width: 100%; height: 280px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; }
+   .product-img img { width: 70%; height: 70%; object-fit: contain; }
+   .sale-badge { position: absolute; top: 15px; left: 15px; background: var(--gold); color: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+   .product-info { padding: 20px; }
+   .product-name { font-size: 18px; font-weight: 600; color: #222; margin-bottom: 8px; }
+   .product-desc { font-size: 13px; color: #777; margin-bottom: 12px; min-height: 35px; }
+   .price { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+   .price-new { font-size: 22px; font-weight: bold; color: var(--gold); }
+   .price-old { font-size: 16px; color: #999; text-decoration: line-through; }
+   .add-cart-btn { width: 100%; padding: 12px; background: var(--gold); color: var(--white); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+   .add-cart-btn:hover { background: #9a7209; }
+   .cart-section { max-width: 700px; margin: 50px auto; padding: 30px; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+   .cart-items { margin: 20px 0; }
+   .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+   .cart-item-remove { color: #d9534f; cursor: pointer; margin-left: 15px; }
+   .form-group { margin-bottom: 20px; }
+   .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+   .form-group input,.form-group textarea,.form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+   .form-group input:focus,.form-group textarea:focus { outline: none; border-color: var(--gold); }
+   .submit-btn { width: 100%; padding: 15px; background: var(--gold); color: var(--white); border: none; font-size: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+   .footer { background: var(--black); color: #aaa; text-align: center; padding: 40px 20px; margin-top: 60px; }
+   .footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 768px) {
+     .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+     .header { flex-wrap: wrap; }
+     .header-right { width: 100%; justify-content: space-between; margin-top: 10px; }
+     .dropdown-content { min-width: 250px; }
+    }
+    @media (max-width: 480px) {
+     .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
 
-</div>  <!-- LOGIN -->  <div id="login" class="box hidden">  
-<h3>Admin Login</h3>  
-<input id="pass" placeholder="Password">  
-<button class="btn" onclick="login()">Login</button>  
-</div>  <!-- ADMIN -->  <div id="admin" class="box hidden">  
-<h3>LIVE ORDERS</h3>  
-<div id="orders"></div>  
-</div>  <script>  
-  
-// ================= FIREBASE =================  
-const firebaseConfig = {  
-apiKey: "YOUR_KEY",  
-authDomain: "YOUR_DOMAIN",  
-projectId: "YOUR_ID"  
-};  
-  
-firebase.initializeApp(firebaseConfig);  
-const db = firebase.firestore();  
-  
-// ================= SECURITY =================  
-const ADMIN_PASS = "1234";  
-  
-// ================= CART =================  
-let cart=[];  
-  
-function add(n,p){  
-let f=cart.find(x=>x.name===n);  
-if(f){f.qty++}else{cart.push({name:n,price:p,qty:1})}  
-render();  
-}  
-  
-function change(n,v){  
-let f=cart.find(x=>x.name===n);  
-f.qty+=v;  
-if(f.qty<=0) cart=cart.filter(x=>x.name!==n);  
-render();  
-}  
-  
-function render(){  
-let h=""; let t=0;  
-  
-cart.forEach(x=>{  
-t+=x.price*x.qty;  
-h+=`  
-<div>  
-${x.name} x${x.qty}  
-<button onclick="change('${x.name}',-1)">-</button>  
-<button onclick="change('${x.name}',1)">+</button>  
-</div>`;  
-});  
-  
-cartDiv.innerHTML=h;  
-total.innerText="Total: Rs "+t;  
-}  
-  
-// ================= ORDER =================  
-function order(){  
-  
-let name=name.value;  
-let phone=phone.value;  
-let address=address.value;  
-  
-if(!name||!phone||!address||cart.length===0){  
-alert("Fill all fields");  
-return;  
-}  
-  
-db.collection("orders").add({  
-name,phone,address,  
-cart,  
-status:"Pending",  
-time:Date.now()  
-});  
-  
-alert("Order Placed (COD)");  
-  
-cart=[];  
-render();  
-}  
-  
-// ================= ADMIN =================  
-function openAdmin(){  
-login.classList.remove("hidden");  
-}  
-  
-function login(){  
-if(pass.value===ADMIN_PASS){  
-login.classList.add("hidden");  
-admin.classList.remove("hidden");  
-loadOrders();  
-}else{  
-alert("Wrong password");  
-}  
-}  
-  
-function loadOrders(){  
-  
-db.collection("orders").orderBy("time","desc")  
-.onSnapshot(snap=>{  
-  
-let h="";  
-  
-snap.forEach(doc=>{  
-let o=doc.data();  
-  
-let items="";  
-o.cart.forEach(i=>{  
-items+=i.name+" x"+i.qty+"<br>";  
-});  
-  
-h+=`  
-<div class="box">  
-<b>${o.name}</b><br>  
-${o.phone}<br>  
-${o.address}<br><br>  
-${items}  
-Status: ${o.status}<br>  
-</div>  
-`;  
-});  
-  
-orders.innerHTML=h;  
-  
-});  
-}  
-  
-// ================= LANGUAGE =================  
-function lang(l){  
-if(l==="ur"){  
-cartTitle.innerText="ٹوکری";  
-}else{  
-cartTitle.innerText="Cart";  
-}  
-}  
-  
-</script>  </body>  
-</html>
+  <div class="topbar">
+    <span data-lang="freeshipping">Free Delivery across Pakistan</span>
+  </div>
+
+  <div class="header">
+    <img src="https://i.imgur.com/8Q1Z7vL.png" alt="MUSK AL QASAR" class="logo">
+    <div class="header-right">
+      <div class="dropdown">
+        <button class="dropdown-btn" onclick="toggleDropdown('countryDropdown')">
+          <img src="https://flagcdn.com/w20/pk.png" width="20" alt="PK"> <span id="currentCountry">Pakistan</span> <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+        </button>
+        <div id="countryDropdown" class="dropdown-content">
+          <a href="#" onclick="selectCountry('pk', 'Pakistan', true)"><img src="https://flagcdn.com/w20/pk.png" width="20"> Pakistan</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ae.png" width="20"> UAE - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/sa.png" width="20"> Saudi Arabia - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/qa.png" width="20"> Qatar - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/kw.png" width="20"> Kuwait - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/om.png" width="20"> Oman - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/bh.png" width="20"> Bahrain - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/us.png" width="20"> United States - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/gb.png" width="20"> United Kingdom - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/ca.png" width="20"> Canada - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/in.png" width="20"> India - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/bd.png" width="20"> Bangladesh - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/tr.png" width="20"> Turkey - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/my.png" width="20"> Malaysia - Coming Soon</a>
+          <a href="#" class="disabled"><img src="https://flagcdn.com/w20/id.png" width="20"> Indonesia - Coming Soon</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropdown-btn" onclick="toggleDropdown('langDropdown')">
+          <i class="fas fa-globe"></i> <span id="currentLang">English</span> <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+        </button>
+        <div id="langDropdown" class="dropdown-content">
+          <a href="#" onclick="changeLang('en')">English</a>
+          <a href="#" onclick="changeLang('ur')">اردو</a>
+          <a href="#" onclick="changeLang('ar')">العربية</a>
+          <a href="#" onclick="changeLang('hi')">हिंदी</a>
+          <a href="#" onclick="changeLang('bn')">বাংলা</a>
+          <a href="#" onclick="changeLang('tr')">Türkçe</a>
+          <a href="#" onclick="changeLang('fr')">Français</a>
+          <a href="#" onclick="changeLang('de')">Deutsch</a>
+          <a href="#" onclick="changeLang('es')">Español</a>
+          <a href="#" onclick="changeLang('it')">Italiano</a>
+          <a href="#" onclick="changeLang('pt')">Português</a>
+          <a href="#" onclick="changeLang('ru')">Русский</a>
+          <a href="#" onclick="changeLang('zh')">中文</a>
+          <a href="#" onclick="changeLang('ja')">日本語</a>
+          <a href="#" onclick="changeLang('ko')">한국어</a>
+        </div>
+      </div>
+
+      <div class="dropdown-btn" onclick="scrollToCart()">
+        <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search perfume..." data-lang-placeholder="search">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">
+      <span data-lang="topproducts">Top Products</span>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <div class="product-card product-item" data-name="QASR IMPERIAL">
+        <div class="product-img">
+          <span class="sale-badge">SALE</span>
+          <img src="https://i.imgur.com/8Q1Z7vL.png" alt="QASR IMPERIAL">
+        </div>
+        <div class="product-info">
+          <div class="product-name">QASR IMPERIAL</div>
+          <div class="product-desc" data-lang="desc1">Royal Oud & Saffron Blend</div>
+          <div class="price">
+            <span class="price-new">PKR 9,999</span>
+            <span class="price-old">PKR 15,000</span>
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('QASR IMPERIAL', 9999)">
+            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card product-item" data-name="SULTANI OUD">
+        <div class="product-img">
+          <span class="sale-badge">SALE</span>
+          <img src="https://i.imgur.com/9R2a8wM.png" alt="SULTANI OUD">
+        </div>
+        <div class="product-info">
+          <div class="product-name">SULTANI OUD</div>
+          <div class="product-desc" data-lang="desc2">Pure Cambodian Oud</div>
+          <div class="price">
+            <span class="price-new">PKR 8,499</span>
+            <span class="price-old">PKR 12,000</span>
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('SULTANI OUD', 8499)">
+            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card product-item" data-name="VELVET MAJLIS">
+        <div class="product-img">
+          <span class="sale-badge">SALE</span>
+          <img src="https://i.imgur.com/3S4b9xN.png" alt="VELVET MAJLIS">
+        </div>
+        <div class="product-info">
+          <div class="product-name">VELVET MAJLIS</div>
+          <div class="product-desc" data-lang="desc3">Amber & Rose Luxury</div>
+          <div class="price">
+            <span class="price-new">PKR 7,299</span>
+            <span class="price-old">PKR 10,000</span>
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('VELVET MAJLIS', 7299)">
+            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card product-item" data-name="ROYAL AMBER">
+        <div class="product-img">
+          <span class="sale-badge">SALE</span>
+          <img src="https://i.imgur.com/8Q1Z7vL.png" alt="ROYAL AMBER">
+        </div>
+        <div class="product-info">
+          <div class="product-name">ROYAL AMBER</div>
+          <div class="product-desc" data-lang="desc4">Premium Amber & Musk</div>
+          <div class="price">
+            <span class="price-new">PKR 6,999</span>
+            <span class="price-old">PKR 9,500</span>
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('ROYAL AMBER', 6999)">
+            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="orderSection" class="cart-section">
+    <h2 style="text-align: center; color: #b8860b; margin-bottom: 10px;" data-lang="title">🛒 Your Order</h2>
+    <p style="text-align: center; color: green; font-weight: 600; margin-bottom: 20px;" data-lang="delivery">🚚 Free Home Delivery All Over Pakistan</p>
+
+    <div id="pakistanOnly">
+      <div class="cart-items" id="cartItems">
+        <p style="text-align: center; color: #999;" data-lang="empty">Cart is empty</p>
+      </div>
+      <h3 id="totalPrice" style="text-align: right; margin: 20px 0; font-size: 24px;">Total: PKR 0</h3>
+
+      <form action="https://formspree.io/f/xpzgkror" method="POST" id="orderForm">
+        <input type="hidden" name="_subject" value="New Order - MUSK AL QASAR">
+        <input type="hidden" name="Order_Details" id="orderDetails">
+
+        <div class="form-group">
+          <label data-lang="name">Your Name:</label>
+          <input type="text" name="Name" placeholder="Full Name" required>
+        </div>
+
+        <div class="form-group">
+          <label data-lang="phone">Phone Number:</label>
+          <input type="tel" name="Phone" placeholder="03XX XXXXXXX" required>
+        </div>
+
+        <div class="form-group">
+          <label data-lang="country">Country:</label>
+          <select name="Country" id="countrySelect" required>
+            <option value="Pakistan">Pakistan</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label data-lang="address">Complete Address:</label>
+          <textarea name="Address" placeholder="House#, Street, Area, City" rows="3" required></textarea>
+        </div>
+
+        <button type="submit" onclick="return prepareOrder()" class="submit-btn" data-lang="order">Place Order</button>
+      </form>
+    </div>
+
+    <div id="comingSoon" style="display: none; text-align: center; padding: 40px;">
+      <h2 style="color: #b8860b; margin-bottom: 15px;" data-lang="comingsoon">Coming Soon!</h2>
+      <p data-lang="comingsoontext">We are not delivering to your country yet. Stay tuned!</p>
+    </div>
+
+    <p style="text-align: center; font-size: 12px; margin-top: 15px; color: #777;" data-lang="note">We will call you within 24 hours after order</p>
+  </div>
+
+  <div class="footer">
+    <p data-lang="copyright">© 2026 MUSK AL QASAR. All Rights Reserved.</p>
+    <p>Email: <a href="mailto:asifchand1212@gmail.com">asifchand1212@gmail.com</a></p>
+  </div>
+
+<script>
+let cart = [];
+let currentLang = 'en';
+
+function toggleDropdown(id) {
+  document.getElementById(id).classList.toggle("show");
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.dropdown-btn') &&!event.target.closest('.dropdown-btn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      if (dropdowns[i].classList.contains('show')) {
+        dropdowns[i].classList.remove('show');
+      }
+    }
+  }
+}
+
+function selectCountry(code, name, allowed) {
+  document.getElementById('currentCountry').innerText = name;
+  document.getElementById('countrySelect').value = name;
+  if(!allowed) {
+    document.getElementById('pakistanOnly').style.display = 'none';
+    document.getElementById('comingSoon').style.display = 'block';
+  } else {
+    document.getElementById('pakistanOnly').style.display = 'block';
+    document.getElementById('comingSoon').style.display = 'none';
+  }
+  document.getElementById('countryDropdown').classList.remove('show');
+}
+
+const translations = {
+  en: { freeshipping: "Free Delivery across Pakistan", topproducts: "Top Products", desc1: "Royal Oud & Saffron Blend", desc2: "Pure Cambodian Oud", desc3: "Amber & Rose Luxury", desc4: "Premium Amber & Musk", title: "🛒 Your Order", delivery: "🚚 Free Home Delivery All Over Pakistan", addcart: "Add to Cart", empty: "Cart is empty", name: "Your Name:", phone: "Phone Number:", country: "Country:", address: "Complete Address:", order: "Place Order", note: "We will call you within 24 hours after order", search: "Search perfume...", copyright: "© 2026 MUSK AL QASAR. All Rights Reserved.", comingsoon: "Coming Soon!", comingsoontext: "We are not delivering to your country yet. Stay tuned!" },
+  ur: { freeshipping: "پورے پاکستان میں مفت ڈیلیوری", topproducts: "ٹاپ پروڈکٹس", desc1: "شاہی عود اور زعفران کا مرکب", desc2: "خالص کمبوڈین عود", desc3: "عنبر اور گلاب کی لگژری", desc4: "پریمیم عنبر اور مشک", title: "🛒 آپ کا آرڈر", delivery: "🚚 پورے پاکستان میں مفت ہوم ڈیلیوری", addcart: "کارٹ میں ڈالیں", empty: "کارٹ خالی ہے", name: "آپ کا نام:", phone: "فون نمبر:", country: "ملک:", address: "مکمل پتہ:", order: "آرڈر کریں", note: "آرڈر کے بعد 24 گھنٹے میں ہم کال کریں گے", search: "پرفیوم تلاش کریں...", copyright: "© 2026 مسک القصر۔ جملہ حقوق محفوظ ہیں۔", comingsoon: "جلد آ رہا ہے!", comingsoontext: "ہم ابھی آپ کے ملک میں ڈیلیور نہیں کر رہے۔ انتظار کریں!" },
+  ar: { freeshipping: "توصيل مجاني في جميع أنحاء باكستان", topproducts: "أفضل المنتجات", desc1: "مزيج العود الملكي والزعفران", desc2: "عود كمبودي نقي", desc3: "فخامة العنبر والورد", desc4: "عنبر ومسك فاخر", title: "🛒 طلبك", delivery: "🚚 توصيل مجاني لجميع أنحاء باكستان", addcart: "أضف إلى السلة", empty: "السلة فارغة", name: "الاسم:", phone: "رقم الهاتف:", country: "البلد:", address: "العنوان الكامل:", order: "تأكيد الطلب", note: "سوف نتصل بك خلال 24 ساعة بعد الطلب", search: "ابحث عن العطر...", copyright: "© 2026 مسك القصر. جميع الحقوق محفوظة.", comingsoon: "قريباً!", comingsoontext: "نحن لا نقوم بالتوصيل إلى بلدك بعد. ترقبوا!" },
+  hi: { freeshipping: "पूरे पाकिस्तान में मुफ्त डिलीवरी", topproducts: "टॉप प्रोडक्ट्स", desc1: "शाही ऊद और केसर मिश्रण", desc2: "शुद्ध कंबोडियन ऊद", desc3: "अंबर और गुलाब लक्जरी", desc4: "प्रीमियम अंबर और मुश्क", title: "🛒 आपका ऑर्डर", delivery: "🚚 पूरे पाकिस्तान में मुफ्त होम डिलीवरी", addcart: "कार्ट में डालें", empty: "कार्ट खाली है", name: "आपका नाम:", phone: "फोन नंबर:", country: "देश:", address: "पूरा पता:", order: "ऑर्डर करें", note: "ऑर्डर के बाद 24 घंटे में हम कॉल करेंगे", search: "परफ्यूम खोजें...", copyright: "© 2026 मस्क अल क़सर। सर्वाधिकार सुरक्षित।", comingsoon: "जल्द आ रहा है!", comingsoontext: "हम अभी आपके देश में डिलीवरी नहीं कर रहे हैं। बने रहें!" }
+};
+
+function changeLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    const key = el.getAttribute('data-lang');
+    if(translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+  });
+  document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-lang-placeholder');
+    if(translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
+  });
+  document.getElementById('currentLang').innerText = lang === 'en'? 'English' : lang === 'ur'? 'اردو' : lang === 'ar'? 'العربية' : lang === 'hi'? 'हिंदी' : lang;
+  document.documentElement.lang = lang;
+  document.body.style.direction = (lang === 'ar' || lang === 'ur')? 'rtl' : 'ltr';
+  document.getElementById('langDropdown').classList.remove('show');
+}
+
+function searchProducts() {
+  const input = document.getElementById('searchInpu
