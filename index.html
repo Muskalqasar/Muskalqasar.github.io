@@ -10,63 +10,63 @@
     :root { --gold: #b8860b; --black: #1a1a1a; --white: #ffffff; --gray: #f5f5f5; }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background: #fafafa; color: #222; }
-   .topbar { background: var(--black); color: var(--white); padding: 8px 4%; font-size: 13px; text-align: center; }
-   .header { background: var(--white); padding: 15px 4%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 999; }
-   .logo { height: 50px; }
-   .header-right { display: flex; gap: 15px; align-items: center; }
-   .dropdown { position: relative; }
-   .dropdown-btn { background: none; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; padding: 8px 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-   .dropdown-content { display: none; position: absolute; background: var(--white); min-width: 280px; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 999; right: 0; border-radius: 8px; margin-top: 5px; }
-   .dropdown-content a { color: #333; padding: 10px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-   .dropdown-content a:hover { background: var(--gray); }
-   .show { display: block; }
-   .disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
-   .search-section { background: var(--gray); padding: 20px 4%; }
-   .search-box { max-width: 600px; margin: 0 auto; position: relative; }
-   .search-box input { width: 100%; padding: 14px 50px 14px 20px; border: 2px solid var(--gold); border-radius: 30px; font-size: 15px; }
-   .search-box i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--gold); }
-   .container { max-width: 1300px; margin: 30px auto; padding: 0 4%; }
-   .section-title { font-size: 28px; color: #222; margin: 30px 0 20px; font-weight: 600; }
-   .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-   .product-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
-   .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-   .product-img { width: 100%; height: 280px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; }
-   .product-img img { width: 70%; height: 70%; object-fit: contain; }
-   .sale-badge { position: absolute; top: 15px; left: 15px; background: var(--gold); color: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; }
-   .product-info { padding: 20px; }
-   .product-name { font-size: 18px; font-weight: 600; color: #222; margin-bottom: 8px; }
-   .product-desc { font-size: 13px; color: #777; margin-bottom: 12px; min-height: 35px; }
-   .price { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-   .price-new { font-size: 22px; font-weight: bold; color: var(--gold); }
-   .price-old { font-size: 16px; color: #999; text-decoration: line-through; }
-   .add-cart-btn { width: 100%; padding: 12px; background: var(--gold); color: var(--white); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-   .add-cart-btn:hover { background: #9a7209; }
-   .cart-section { max-width: 700px; margin: 50px auto; padding: 30px; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-   .cart-items { margin: 20px 0; }
-   .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
-   .cart-item-remove { color: #d9534f; cursor: pointer; margin-left: 15px; }
-   .form-group { margin-bottom: 20px; }
-   .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-   .form-group input,.form-group textarea,.form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-   .form-group input:focus,.form-group textarea:focus { outline: none; border-color: var(--gold); }
-   .submit-btn { width: 100%; padding: 15px; background: var(--gold); color: var(--white); border: none; font-size: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-   .footer { background: var(--black); color: #aaa; text-align: center; padding: 40px 20px; margin-top: 60px; }
-   .footer a { color: var(--gold); text-decoration: none; }
+.topbar { background: var(--black); color: var(--white); padding: 8px 4%; font-size: 13px; text-align: center; }
+.header { background: var(--white); padding: 15px 4%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 999; }
+.logo { height: 50px; }
+.header-right { display: flex; gap: 15px; align-items: center; }
+.dropdown { position: relative; }
+.dropdown-btn { background: none; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; padding: 8px 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+.dropdown-content { display: none; position: absolute; background: var(--white); min-width: 300px; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 999; right: 0; border-radius: 8px; margin-top: 5px; }
+.dropdown-content a { color: #333; padding: 10px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.dropdown-content a:hover { background: var(--gray); }
+.show { display: block!important; }
+.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.search-section { background: var(--gray); padding: 20px 4%; }
+.search-box { max-width: 600px; margin: 0 auto; position: relative; }
+.search-box input { width: 100%; padding: 14px 50px 14px 20px; border: 2px solid var(--gold); border-radius: 30px; font-size: 15px; }
+.search-box i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+.container { max-width: 1300px; margin: 30px auto; padding: 0 4%; }
+.section-title { font-size: 28px; color: #222; margin: 30px 0 20px; font-weight: 600; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.product-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.product-img { width: 100%; height: 280px; background: var(--black); display: flex; align-items: center; justify-content: center; position: relative; }
+.product-img img { width: 70%; height: 70%; object-fit: contain; }
+.sale-badge { position: absolute; top: 15px; left: 15px; background: var(--gold); color: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+.product-info { padding: 20px; }
+.product-name { font-size: 18px; font-weight: 600; color: #222; margin-bottom: 8px; }
+.product-desc { font-size: 13px; color: #777; margin-bottom: 12px; min-height: 35px; }
+.price { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+.price-new { font-size: 22px; font-weight: bold; color: var(--gold); }
+.price-old { font-size: 16px; color: #999; text-decoration: line-through; }
+.add-cart-btn { width: 100%; padding: 12px; background: var(--gold); color: var(--white); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.add-cart-btn:hover { background: #9a7209; }
+.cart-section { max-width: 700px; margin: 50px auto; padding: 30px; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+.cart-items { margin: 20px 0; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+.cart-item-remove { color: #d9534f; cursor: pointer; margin-left: 15px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+.form-group input,.form-group textarea,.form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+.form-group input:focus,.form-group textarea:focus { outline: none; border-color: var(--gold); }
+.submit-btn { width: 100%; padding: 15px; background: var(--gold); color: var(--white); border: none; font-size: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.footer { background: var(--black); color: #aaa; text-align: center; padding: 40px 20px; margin-top: 60px; }
+.footer a { color: var(--gold); text-decoration: none; }
     @media (max-width: 768px) {
-     .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-     .header { flex-wrap: wrap; }
-     .header-right { width: 100%; justify-content: space-between; margin-top: 10px; }
-     .dropdown-content { min-width: 250px; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .header { flex-wrap: wrap; }
+    .header-right { width: 100%; justify-content: space-between; margin-top: 10px; }
+    .dropdown-content { min-width: 250px; }
     }
     @media (max-width: 480px) {
-     .product-grid { grid-template-columns: 1fr; }
+    .product-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
   <div class="topbar">
-    <span data-lang="freeshipping">Free Delivery across Pakistan</span>
+    <span id="topbarText">Free Delivery across Pakistan</span>
   </div>
 
   <div class="header">
@@ -126,14 +126,14 @@
 
   <div class="search-section">
     <div class="search-box">
-      <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search perfume..." data-lang-placeholder="search">
+      <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search perfume..." id="searchPlaceholder">
       <i class="fas fa-search"></i>
     </div>
   </div>
 
   <div class="container">
     <div class="section-title">
-      <span data-lang="topproducts">Top Products</span>
+      <span id="topProductsText">Top Products</span>
     </div>
 
     <div class="product-grid" id="productGrid">
@@ -144,13 +144,13 @@
         </div>
         <div class="product-info">
           <div class="product-name">QASR IMPERIAL</div>
-          <div class="product-desc" data-lang="desc1">Royal Oud & Saffron Blend</div>
+          <div class="product-desc" id="desc1">Royal Oud & Saffron Blend</div>
           <div class="price">
             <span class="price-new">PKR 9,999</span>
             <span class="price-old">PKR 15,000</span>
           </div>
           <button class="add-cart-btn" onclick="addToCart('QASR IMPERIAL', 9999)">
-            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+            <i class="fas fa-shopping-cart"></i> <span id="addcart1">Add to Cart</span>
           </button>
         </div>
       </div>
@@ -162,13 +162,13 @@
         </div>
         <div class="product-info">
           <div class="product-name">SULTANI OUD</div>
-          <div class="product-desc" data-lang="desc2">Pure Cambodian Oud</div>
+          <div class="product-desc" id="desc2">Pure Cambodian Oud</div>
           <div class="price">
             <span class="price-new">PKR 8,499</span>
             <span class="price-old">PKR 12,000</span>
           </div>
           <button class="add-cart-btn" onclick="addToCart('SULTANI OUD', 8499)">
-            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+            <i class="fas fa-shopping-cart"></i> <span id="addcart2">Add to Cart</span>
           </button>
         </div>
       </div>
@@ -180,13 +180,13 @@
         </div>
         <div class="product-info">
           <div class="product-name">VELVET MAJLIS</div>
-          <div class="product-desc" data-lang="desc3">Amber & Rose Luxury</div>
+          <div class="product-desc" id="desc3">Amber & Rose Luxury</div>
           <div class="price">
             <span class="price-new">PKR 7,299</span>
             <span class="price-old">PKR 10,000</span>
           </div>
           <button class="add-cart-btn" onclick="addToCart('VELVET MAJLIS', 7299)">
-            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+            <i class="fas fa-shopping-cart"></i> <span id="addcart3">Add to Cart</span>
           </button>
         </div>
       </div>
@@ -198,13 +198,13 @@
         </div>
         <div class="product-info">
           <div class="product-name">ROYAL AMBER</div>
-          <div class="product-desc" data-lang="desc4">Premium Amber & Musk</div>
+          <div class="product-desc" id="desc4">Premium Amber & Musk</div>
           <div class="price">
             <span class="price-new">PKR 6,999</span>
             <span class="price-old">PKR 9,500</span>
           </div>
           <button class="add-cart-btn" onclick="addToCart('ROYAL AMBER', 6999)">
-            <i class="fas fa-shopping-cart"></i> <span data-lang="addcart">Add to Cart</span>
+            <i class="fas fa-shopping-cart"></i> <span id="addcart4">Add to Cart</span>
           </button>
         </div>
       </div>
@@ -212,12 +212,12 @@
   </div>
 
   <div id="orderSection" class="cart-section">
-    <h2 style="text-align: center; color: #b8860b; margin-bottom: 10px;" data-lang="title">🛒 Your Order</h2>
-    <p style="text-align: center; color: green; font-weight: 600; margin-bottom: 20px;" data-lang="delivery">🚚 Free Home Delivery All Over Pakistan</p>
+    <h2 style="text-align: center; color: #b8860b; margin-bottom: 10px;" id="cartTitle">🛒 Your Order</h2>
+    <p style="text-align: center; color: green; font-weight: 600; margin-bottom: 20px;" id="deliveryText">🚚 Free Home Delivery All Over Pakistan</p>
 
     <div id="pakistanOnly">
       <div class="cart-items" id="cartItems">
-        <p style="text-align: center; color: #999;" data-lang="empty">Cart is empty</p>
+        <p style="text-align: center; color: #999;" id="emptyCartText">Cart is empty</p>
       </div>
       <h3 id="totalPrice" style="text-align: right; margin: 20px 0; font-size: 24px;">Total: PKR 0</h3>
 
@@ -226,47 +226,54 @@
         <input type="hidden" name="Order_Details" id="orderDetails">
 
         <div class="form-group">
-          <label data-lang="name">Your Name:</label>
+          <label id="nameLabel">Your Name:</label>
           <input type="text" name="Name" placeholder="Full Name" required>
         </div>
 
         <div class="form-group">
-          <label data-lang="phone">Phone Number:</label>
+          <label id="phoneLabel">Phone Number:</label>
           <input type="tel" name="Phone" placeholder="03XX XXXXXXX" required>
         </div>
 
         <div class="form-group">
-          <label data-lang="country">Country:</label>
+          <label id="countryLabel">Country:</label>
           <select name="Country" id="countrySelect" required>
             <option value="Pakistan">Pakistan</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label data-lang="address">Complete Address:</label>
+          <label id="addressLabel">Complete Address:</label>
           <textarea name="Address" placeholder="House#, Street, Area, City" rows="3" required></textarea>
         </div>
 
-        <button type="submit" onclick="return prepareOrder()" class="submit-btn" data-lang="order">Place Order</button>
+        <button type="submit" onclick="return prepareOrder()" class="submit-btn" id="orderBtn">Place Order</button>
       </form>
     </div>
 
     <div id="comingSoon" style="display: none; text-align: center; padding: 40px;">
-      <h2 style="color: #b8860b; margin-bottom: 15px;" data-lang="comingsoon">Coming Soon!</h2>
-      <p data-lang="comingsoontext">We are not delivering to your country yet. Stay tuned!</p>
+      <h2 style="color: #b8860b; margin-bottom: 15px;" id="comingSoonTitle">Coming Soon!</h2>
+      <p id="comingSoonText">We are not delivering to your country yet. Stay tuned!</p>
     </div>
 
-    <p style="text-align: center; font-size: 12px; margin-top: 15px; color: #777;" data-lang="note">We will call you within 24 hours after order</p>
+    <p style="text-align: center; font-size: 12px; margin-top: 15px; color: #777;" id="noteText">We will call you within 24 hours after order</p>
   </div>
 
   <div class="footer">
-    <p data-lang="copyright">© 2026 MUSK AL QASAR. All Rights Reserved.</p>
+    <p id="copyrightText">© 2026 MUSK AL QASAR. All Rights Reserved.</p>
     <p>Email: <a href="mailto:asifchand1212@gmail.com">asifchand1212@gmail.com</a></p>
   </div>
 
 <script>
 let cart = [];
 let currentLang = 'en';
+
+const translations = {
+  en: { topbar: "Free Delivery across Pakistan", topproducts: "Top Products", desc1: "Royal Oud & Saffron Blend", desc2: "Pure Cambodian Oud", desc3: "Amber & Rose Luxury", desc4: "Premium Amber & Musk", carttitle: "🛒 Your Order", delivery: "🚚 Free Home Delivery All Over Pakistan", addcart: "Add to Cart", empty: "Cart is empty", name: "Your Name:", phone: "Phone Number:", country: "Country:", address: "Complete Address:", order: "Place Order", note: "We will call you within 24 hours after order", search: "Search perfume...", copyright: "© 2026 MUSK AL QASAR. All Rights Reserved.", comingsoon: "Coming Soon!", comingsoontext: "We are not delivering to your country yet. Stay tuned!" },
+  ur: { topbar: "پورے پاکستان میں مفت ڈیلیوری", topproducts: "ٹاپ پروڈکٹس", desc1: "شاہی عود اور زعفران کا مرکب", desc2: "خالص کمبوڈین عود", desc3: "عنبر اور گلاب کی لگژری", desc4: "پریمیم عنبر اور مشک", carttitle: "🛒 آپ کا آرڈر", delivery: "🚚 پورے پاکستان میں مفت ہوم ڈیلیوری", addcart: "کارٹ میں ڈالیں", empty: "کارٹ خالی ہے", name: "آپ کا نام:", phone: "فون نمبر:", country: "ملک:", address: "مکمل پتہ:", order: "آرڈر کریں", note: "آرڈر کے بعد 24 گھنٹے میں ہم کال کریں گے", search: "پرفیوم تلاش کریں...", copyright: "© 2026 مسک القصر۔ جملہ حقوق محفوظ ہیں۔", comingsoon: "جلد آ رہا ہے!", comingsoontext: "ہم ابھی آپ کے ملک میں ڈیلیور نہیں کر رہے۔ انتظار کریں!" },
+  ar: { topbar: "توصيل مجاني في جميع أنحاء باكستان", topproducts: "أفضل المنتجات", desc1: "مزيج العود الملكي والزعفران", desc2: "عود كمبودي نقي", desc3: "فخامة العنبر والورد", desc4: "عنبر ومسك فاخر", carttitle: "🛒 طلبك", delivery: "🚚 توصيل مجاني لجميع أنحاء باكستان", addcart: "أضف إلى السلة", empty: "السلة فارغة", name: "الاسم:", phone: "رقم الهاتف:", country: "البلد:", address: "العنوان الكامل:", order: "تأكيد الطلب", note: "سوف نتصل بك خلال 24 ساعة بعد الطلب", search: "ابحث عن العطر...", copyright: "© 2026 مسك القصر. جميع الحقوق محفوظة.", comingsoon: "قريباً!", comingsoontext: "نحن لا نقوم بالتوصيل إلى بلدك بعد. ترقبوا!" },
+  hi: { topbar: "पूरे पाकिस्तान में मुफ्त डिलीवरी", topproducts: "टॉप प्रोडक्ट्स", desc1: "शाही ऊद और केसर मिश्रण", desc2: "शुद्ध कंबोडियन ऊद", desc3: "अंबर और गुलाब लक्जरी", desc4: "प्रीमियम अंबर और मुश्क", carttitle: "🛒 आपका ऑर्डर", delivery: "🚚 पूरे पाकिस्तान में मुफ्त होम डिलीवरी", addcart: "कार्ट में डालें", empty: "कार्ट खाली है", name: "आपका नाम:", phone: "फोन नंबर:", country: "देश:", address: "पूरा पता:", order: "ऑर्डर करें", note: "ऑर्डर के बाद 24 घंटे में हम कॉल करेंगे", search: "परफ्यूम खोजें...", copyright: "© 2026 मस्क अल क़सर। सर्वाधिकार सुरक्षित।", comingsoon: "जल्द आ रहा है!", comingsoontext: "हम अभी आपके देश में डिलीवरी नहीं कर रहे हैं। बने रहें!" }
+};
 
 function toggleDropdown(id) {
   document.getElementById(id).classList.toggle("show");
@@ -296,28 +303,25 @@ function selectCountry(code, name, allowed) {
   document.getElementById('countryDropdown').classList.remove('show');
 }
 
-const translations = {
-  en: { freeshipping: "Free Delivery across Pakistan", topproducts: "Top Products", desc1: "Royal Oud & Saffron Blend", desc2: "Pure Cambodian Oud", desc3: "Amber & Rose Luxury", desc4: "Premium Amber & Musk", title: "🛒 Your Order", delivery: "🚚 Free Home Delivery All Over Pakistan", addcart: "Add to Cart", empty: "Cart is empty", name: "Your Name:", phone: "Phone Number:", country: "Country:", address: "Complete Address:", order: "Place Order", note: "We will call you within 24 hours after order", search: "Search perfume...", copyright: "© 2026 MUSK AL QASAR. All Rights Reserved.", comingsoon: "Coming Soon!", comingsoontext: "We are not delivering to your country yet. Stay tuned!" },
-  ur: { freeshipping: "پورے پاکستان میں مفت ڈیلیوری", topproducts: "ٹاپ پروڈکٹس", desc1: "شاہی عود اور زعفران کا مرکب", desc2: "خالص کمبوڈین عود", desc3: "عنبر اور گلاب کی لگژری", desc4: "پریمیم عنبر اور مشک", title: "🛒 آپ کا آرڈر", delivery: "🚚 پورے پاکستان میں مفت ہوم ڈیلیوری", addcart: "کارٹ میں ڈالیں", empty: "کارٹ خالی ہے", name: "آپ کا نام:", phone: "فون نمبر:", country: "ملک:", address: "مکمل پتہ:", order: "آرڈر کریں", note: "آرڈر کے بعد 24 گھنٹے میں ہم کال کریں گے", search: "پرفیوم تلاش کریں...", copyright: "© 2026 مسک القصر۔ جملہ حقوق محفوظ ہیں۔", comingsoon: "جلد آ رہا ہے!", comingsoontext: "ہم ابھی آپ کے ملک میں ڈیلیور نہیں کر رہے۔ انتظار کریں!" },
-  ar: { freeshipping: "توصيل مجاني في جميع أنحاء باكستان", topproducts: "أفضل المنتجات", desc1: "مزيج العود الملكي والزعفران", desc2: "عود كمبودي نقي", desc3: "فخامة العنبر والورد", desc4: "عنبر ومسك فاخر", title: "🛒 طلبك", delivery: "🚚 توصيل مجاني لجميع أنحاء باكستان", addcart: "أضف إلى السلة", empty: "السلة فارغة", name: "الاسم:", phone: "رقم الهاتف:", country: "البلد:", address: "العنوان الكامل:", order: "تأكيد الطلب", note: "سوف نتصل بك خلال 24 ساعة بعد الطلب", search: "ابحث عن العطر...", copyright: "© 2026 مسك القصر. جميع الحقوق محفوظة.", comingsoon: "قريباً!", comingsoontext: "نحن لا نقوم بالتوصيل إلى بلدك بعد. ترقبوا!" },
-  hi: { freeshipping: "पूरे पाकिस्तान में मुफ्त डिलीवरी", topproducts: "टॉप प्रोडक्ट्स", desc1: "शाही ऊद और केसर मिश्रण", desc2: "शुद्ध कंबोडियन ऊद", desc3: "अंबर और गुलाब लक्जरी", desc4: "प्रीमियम अंबर और मुश्क", title: "🛒 आपका ऑर्डर", delivery: "🚚 पूरे पाकिस्तान में मुफ्त होम डिलीवरी", addcart: "कार्ट में डालें", empty: "कार्ट खाली है", name: "आपका नाम:", phone: "फोन नंबर:", country: "देश:", address: "पूरा पता:", order: "ऑर्डर करें", note: "ऑर्डर के बाद 24 घंटे में हम कॉल करेंगे", search: "परफ्यूम खोजें...", copyright: "© 2026 मस्क अल क़सर। सर्वाधिकार सुरक्षित।", comingsoon: "जल्द आ रहा है!", comingsoontext: "हम अभी आपके देश में डिलीवरी नहीं कर रहे हैं। बने रहें!" }
-};
-
 function changeLang(lang) {
   currentLang = lang;
-  document.querySelectorAll('[data-lang]').forEach(el => {
-    const key = el.getAttribute('data-lang');
-    if(translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
-  });
-  document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-lang-placeholder');
-    if(translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
-  });
-  document.getElementById('currentLang').innerText = lang === 'en'? 'English' : lang === 'ur'? 'اردو' : lang === 'ar'? 'العربية' : lang === 'hi'? 'हिंदी' : lang;
-  document.documentElement.lang = lang;
-  document.body.style.direction = (lang === 'ar' || lang === 'ur')? 'rtl' : 'ltr';
-  document.getElementById('langDropdown').classList.remove('show');
-}
+  const t = translations[lang] || translations['en'];
 
-function searchProducts() {
-  const input = document.getElementById('searchInpu
+  document.getElementById('topbarText').innerText = t.topbar;
+  document.getElementById('topProductsText').innerText = t.topproducts;
+  document.getElementById('desc1').innerText = t.desc1;
+  document.getElementById('desc2').innerText = t.desc2;
+  document.getElementById('desc3').innerText = t.desc3;
+  document.getElementById('desc4').innerText = t.desc4;
+  document.getElementById('cartTitle').innerText = t.carttitle;
+  document.getElementById('deliveryText').innerText = t.delivery;
+  document.getElementById('addcart1').innerText = t.addcart;
+  document.getElementById('addcart2').innerText = t.addcart;
+  document.getElementById('addcart3').innerText = t.addcart;
+  document.getElementById('addcart4').innerText = t.addcart;
+  document.getElementById('emptyCartText').innerText = t.empty;
+  document.getElementById('nameLabel').innerText = t.name;
+  document.getElementById('phoneLabel').innerText = t.phone;
+  document.getElementById('countryLabel').innerText = t.country;
+  document.getElementById('addressLabel').innerText = t.address;
+  d
