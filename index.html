@@ -1,218 +1,481 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muskalqasar</title>
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-<style>
-body{
-font-family: Arial;
-margin:0;
-background:#000;
-color:#fff;
-}
+import { useState, useEffect, useMemo, FormEvent } from 'react';
+import { 
+  ShoppingCart, 
+  Menu, 
+  ChevronDown, 
+  X, 
+  Diamond, 
+  Instagram, 
+  Facebook, 
+  Twitter, 
+  Phone, 
+  User as UserIcon, 
+  Plus, 
+  Minus, 
+  Trash2, 
+  ArrowRight,
+  LogOut,
+  Mail,
+  Lock,
+  Loader2,
+  Sparkles,
+  Search,
+  ChevronRight,
+  MessageSquare,
+  ShieldCheck
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { GoogleGenAI } from "@google/genai";
 
-header{
-display:flex;
-justify-content:space-between;
-padding:15px;
-background:#111;
-}
+const COUNTRIES = ['PK', 'UAE', 'SA', 'US', 'UK'];
 
-a{
-color:gold;
-text-decoration:none;
-cursor:pointer;
-}
-
-.products{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.card{
-background:#1a1a1a;
-padding:15px;
-margin:10px;
-width:200px;
-text-align:center;
-border-radius:10px;
-}
-
-img{
-width:100%;
-border-radius:10px;
-}
-
-button{
-background:gold;
-border:none;
-padding:10px;
-cursor:pointer;
-margin-top:10px;
-}
-
-input{
-display:block;
-margin:10px auto;
-padding:10px;
-width:80%;
-}
-
-.page{
-display:none;
-padding:10px;
-}
-
-.active{
-display:block;
-}
-
-@media(max-width:600px){
-.products{
-flex-direction:column;
-align-items:center;
-}
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<h2>Muskalqasar</h2>
-<div>
-<a onclick="showPage('home')">Home</a> |
-<a onclick="showPage('cart')">Cart (<span id="count">0</span>)</a>
-</div>
-</header>
-
-<!-- HOME -->
-<div id="home" class="page active">
-<div class="products">
-
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Oud Royal</h3>
-<p>Rs 2500</p>
-<button onclick="addToCart('Oud Royal',2500)">Add</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Amber Night</h3>
-<p>Rs 3000</p>
-<button onclick="addToCart('Amber Night',3000)">Add</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Musk Gold</h3>
-<p>Rs 2800</p>
-<button onclick="addToCart('Musk Gold',2800)">Add</button>
-</div>
-
-</div>
-</div>
-
-<!-- CART -->
-<div id="cart" class="page">
-<h2>Your Cart</h2>
-<div id="cartItems"></div>
-<h3>Total: Rs <span id="total">0</span></h3>
-<button onclick="showPage('checkout')">Checkout</button>
-</div>
-
-<!-- CHECKOUT -->
-<div id="checkout" class="page">
-<h2>Checkout</h2>
-
-<p>Send payment to JazzCash:</p>
-<p><b>03228110393</b></p>
-
-<input type="text" id="name" placeholder="Your Name">
-<input type="text" id="address" placeholder="Your Address">
-
-<button onclick="placeOrder()">Place Order</button>
-</div>
-
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function saveCart(){
-localStorage.setItem("cart", JSON.stringify(cart));
-updateCount();
-}
-
-function addToCart(name, price){
-cart.push({name, price});
-saveCart();
-alert("Added to cart");
-}
-
-function updateCount(){
-document.getElementById("count").innerText = cart.length;
-}
-
-function showPage(page){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(page).classList.add("active");
-
-if(page==="cart") loadCart();
-}
-
-function loadCart(){
-let container = document.getElementById("cartItems");
-let total = 0;
-container.innerHTML="";
-
-cart.forEach((item,index)=>{
-total += item.price;
-
-container.innerHTML += `
-<div>
-${item.name} - Rs ${item.price}
-<button onclick="removeItem(${index})">X</button>
-</div>
-`;
-});
-
-document.getElementById("total").innerText = total;
-}
-
-function removeItem(i){
-cart.splice(i,1);
-saveCart();
-loadCart();
-}
-
-function placeOrder(){
-let name = document.getElementById("name").value;
-let address = document.getElementById("address").value;
-
-if(name==="" || address===""){
-alert("Fill all fields");
-return;
-}
-
-let order = {
-name,
-address,
-cart
+const CURRENCY_MAP: Record<string, { symbol: string; rate: number; code: string }> = {
+  PK: { symbol: 'Rs.', rate: 1, code: 'PKR' },
+  UAE: { symbol: 'AED', rate: 0.013, code: 'AED' },
+  SA: { symbol: 'SAR', rate: 0.014, code: 'SAR' },
+  US: { symbol: '$', rate: 0.0036, code: 'USD' },
+  UK: { symbol: 'Â£', rate: 0.0028, code: 'GBP' },
 };
 
-localStorage.setItem("lastOrder", JSON.stringify(order));
-
-cart=[];
-saveCart();
-
-alert("Order placed! Send payment to 03228110393 (JazzCash)");
-showPage('home');
+interface Product {
+  id: number;
+  name: string;
+  price: string; // Base price in PKR
+  image: string;
+  desc: string;
 }
 
-updateCount();
-</script>
+interface CartItem extends Product {
+  quantity: number;
+}
 
-</body>
-</html>
+interface User {
+  email: string;
+  name: string;
+}
+
+const PRODUCTS: Product[] = [
+  { 
+    id: 1, 
+    name: "Royal Oud", 
+    price: "4500", 
+    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=800",
+    desc: "A rich, woody blend of Cambodian Oud and spices."
+  },
+  { 
+    id: 2, 
+    name: "Musk Al Sultan", 
+    price: "3200", 
+    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=800" ,
+    desc: "Pure white musk with white floral undertones."
+  },
+  { 
+    id: 3, 
+    name: "Amber Gold", 
+    price: "5800", 
+    image: "https://images.unsplash.com/photo-1512715502754-837e4ddca37b?auto=format&fit=crop&q=80&w=800",
+    desc: "Warm amber combined with vanilla and sandalwood."
+  },
+  { 
+    id: 4, 
+    name: "Rose Taifi", 
+    price: "3900", 
+    image: "https://images.unsplash.com/photo-1563170351-be82bc888bb4?auto=format&fit=crop&q=80&w=800",
+    desc: "The finest Taifi roses distilled for ultimate freshness."
+  },
+  { 
+    id: 5, 
+    name: "Jasmine Night", 
+    price: "4100", 
+    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800",
+    desc: "Captivating night-blooming jasmine for an alluring trail."
+  },
+  { 
+    id: 6, 
+    name: "Sandal Wood", 
+    price: "3600", 
+    image: "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?auto=format&fit=crop&q=80&w=800",
+    desc: "Classic Mysore sandalwood with creamy, milky notes."
+  },
+];
+
+export default function App() {
+  const [country, setCountry] = useState('PK');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Auth State
+  const [user, setUser] = useState<User | null>(null);
+  const [authModal, setAuthModal] = useState<{ open: boolean; mode: 'login' | 'signup' | 'forgot' }>({ open: false, mode: 'login' });
+  const [authForm, setAuthForm] = useState({ email: '', password: '', name: '' });
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Cart State
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  });
+
+  // Interaction State
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [detailQuantity, setDetailQuantity] = useState(1);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [aiPrompt, setAiPrompt] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    
+    // Load from local storage
+    const savedCart = localStorage.getItem('muskalqasar_cart');
+    if (savedCart) setCart(JSON.parse(savedCart));
+    
+    const savedUser = localStorage.getItem('muskalqasar_user');
+    if (savedUser) setUser(JSON.parse(savedUser));
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('muskalqasar_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    if (user) localStorage.setItem('muskalqasar_user', JSON.stringify(user));
+    else localStorage.removeItem('muskalqasar_user');
+  }, [user]);
+
+  const cartCount = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
+  const cartTotal = useMemo(() => cart.reduce((acc, item) => acc + (Number(item.price) * item.quantity), 0), [cart]);
+
+  const currency = CURRENCY_MAP[country] || CURRENCY_MAP.PK;
+
+  const formatPrice = (pkrPrice: string) => {
+    const converted = Number(pkrPrice) * currency.rate;
+    // Format to 2 decimal places if not PKR
+    const value = country === 'PK' ? Math.round(converted).toLocaleString() : converted.toFixed(2);
+    return `${currency.symbol} ${value}`;
+  };
+
+  const addToCart = (product: Product, qty: number = 1) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + qty } : item);
+      }
+      return [...prev, { ...product, quantity: qty }];
+    });
+    setShowCheckoutForm(false);
+    setCartOpen(true);
+  };
+
+  const handleCheckout = (e: FormEvent) => {
+    e.preventDefault();
+    
+    if (cartTotal < 3000) {
+      alert("Minimum order value is Rs. 3,000 for boutique delivery.");
+      return;
+    }
+
+    if (!customerInfo.name || !customerInfo.email || !customerInfo.address || !customerInfo.phone) {
+      alert("Please provide all delivery details.");
+      return;
+    }
+
+    setIsCheckingOut(true);
+    // Simulate order notification and processing
+    setTimeout(() => {
+      alert(`âœ¨ ORDER ACCEPTED âœ¨\n\nThank you, ${customerInfo.name}! Your request has been received at our Main Branch.\n\nTotal: ${formatPrice(cartTotal.toString())}\nPayment: Cash on Delivery\n\nOur curator will contact you at ${customerInfo.phone} to confirm the dispatch. Notification sent to asifchand1212@gmail.com.`);
+      setCart([]);
+      setCartOpen(false);
+      setIsCheckingOut(false);
+      setShowCheckoutForm(false);
+      setCustomerInfo({ name: '', email: '', phone: '', address: '' });
+    }, 2500);
+  };
+
+  const updateQuantity = (id: number, delta: number) => {
+    setCart(prev => prev.map(item => {
+      if (item.id === id) {
+        const newQty = Math.max(1, item.quantity + delta);
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }));
+  };
+
+  const removeFromCart = (id: number) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleAuth = (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Mocking auth delay
+    setTimeout(() => {
+      if (authModal.mode === 'login' || authModal.mode === 'signup') {
+        const userData = { email: authForm.email, name: authForm.name || authForm.email.split('@')[0] };
+        setUser(userData);
+        setAuthModal({ ...authModal, open: false });
+      } else if (authModal.mode === 'forgot') {
+        alert('Password reset link sent to your email (mock)');
+        setAuthModal({ ...authModal, mode: 'login' });
+      }
+      setIsLoading(false);
+      setAuthForm({ email: '', password: '', name: '' });
+    }, 1500);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const askAi = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!aiPrompt.trim()) return;
+
+    setAiLoading(true);
+    setAiResponse(null);
+
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const prompt = `You are a luxury perfume consultant for "Muskalqasar", a high-end Pakistani fragrance brand. 
+      Our current collection includes:
+      ${PRODUCTS.map(p => `- ${p.name}: ${p.desc} (Price: Rs. ${p.price})`).join('\n')}
+      
+      User is looking for a scent and says: "${aiPrompt}"
+      Recommend the best fragrance from our collection. Keep your response elegant, sophisticated, and under 100 words. Focus on the notes and the mood.`;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+      });
+
+      setAiResponse(response.text || "I apologize, but I'm unable to provide a recommendation at this moment. Please explore our featured collection.");
+    } catch (error) {
+      console.error("AI Error:", error);
+      setAiResponse("I'm sorry, our scent consultant is currently unavailable. Please try again later.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen selection:bg-brand-primary/20">
+      {/* Announcement Bar */}
+      <div className="bg-brand-primary text-white text-[10px] uppercase tracking-[0.3em] py-2.5 px-12 flex justify-end font-medium">
+        <span>Region: {country} {country !== 'PK' && <span className="opacity-70 ml-1 italic font-bold">(Coming Soon)</span>} â€” Threshold: {formatPrice('10000')}</span>
+        
+        <div className="relative ml-6">
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="flex items-center gap-1 hover:opacity-80 transition-opacity"
+          >
+            <span>Switch</span>
+            <ChevronDown size={10} />
+          </button>
+
+          <AnimatePresence>
+            {showDropdown && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute right-0 mt-2 bg-white text-brand-dark shadow-2xl border border-brand-border z-50 overflow-hidden min-w-[80px]"
+              >
+                {COUNTRIES.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => {
+                      setCountry(c);
+                      setShowDropdown(false);
+                    }}
+                    className={`block px-4 py-3 hover:bg-brand-cream w-full text-left font-bold text-[9px] transition-colors border-b border-brand-border last:border-b-0 flex justify-between items-center ${country === c ? 'text-brand-primary' : 'text-brand-dark'}`}
+                  >
+                    <span>{c} {c === 'PK' && <span className="text-[7px] opacity-60 ml-1">(Main Branch)</span>}</span>
+                    {c !== 'PK' && <span className="text-[7px] text-brand-primary/50 italic">Coming Soon</span>}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <header className={`sticky top-0 z-40 transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 shadow-sm' : 'bg-brand-cream py-8 border-brand-border'}`}>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+          <div className="flex items-center gap-5 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center overflow-hidden">
+               <img 
+                src="https://ais-pre-xbh6s72g2o72nqr5q5r54o-535785840999.asia-southeast1.run.app/api/attachment?path=user_upload_MK_logo.png" 
+                alt="Muskalqasar MK Logo" 
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  // Fallback if image fails
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.parentElement!.innerHTML = '<div class="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center text-white font-serif italic text-xl">M</div>';
+                }}
+               />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-serif tracking-tight font-semibold text-brand-primary italic leading-none">Muskalqasar</h1>
+              <p className="text-[8px] uppercase tracking-[0.4em] text-brand-dark/40 mt-1 font-bold">Main Branch â€” Elite Perfumery</p>
+            </div>
+          </div>
+
+          <nav className="hidden md:flex gap-10 text-[10px] uppercase tracking-[0.25em] font-bold">
+            <a href="#" className="text-brand-primary">Collection</a>
+            <a href="#about" className="text-brand-dark/60 hover:text-brand-primary transition-colors">The House</a>
+            <a href="#shop" className="text-brand-dark/60 hover:text-brand-primary transition-colors">Bespoke</a>
+            <a href="#contact" className="text-brand-dark/60 hover:text-brand-primary transition-colors">Contact</a>
+          </nav>
+
+          <div className="flex gap-8 items-center opacity-80">
+            <div className="hidden md:block">
+              {user ? (
+                <div className="flex items-center gap-4 group relative">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60">Hi, {user.name}</span>
+                  <button onClick={logout} className="text-brand-dark/40 hover:text-brand-primary transition-colors">
+                    <LogOut size={16} />
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setAuthModal({ open: true, mode: 'login' })}
+                  className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60 hover:text-brand-primary transition-colors flex items-center gap-2"
+                >
+                  <UserIcon size={16} />
+                  Login
+                </button>
+              )}
+            </div>
+            
+            <div 
+              className="relative cursor-pointer hover:scale-110 transition-transform"
+              onClick={() => setCartOpen(true)}
+            >
+              <ShoppingCart size={20} strokeWidth={1.5} className="text-brand-dark" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-2 -right-2 bg-brand-primary text-white text-[8px] w-4 h-4 flex items-center justify-center rounded-full font-bold"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
+            <button 
+              className="md:hidden text-brand-dark p-1"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu size={24} strokeWidth={1.5} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Cart Drawer */}
+      <AnimatePresence>
+        {cartOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/40 z-[100] backdrop-blur-sm"
+              onClick={() => setCartOpen(false)}
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 w-full md:w-[450px] h-full bg-brand-cream z-[110] flex flex-col shadow-2xl"
+            >
+              <div className="p-8 border-b border-brand-border flex justify-between items-center bg-white text-brand-dark">
+                <div>
+                  <h2 className="text-xl font-serif font-bold text-brand-dark italic">
+                    {showCheckoutForm ? 'Delivery Details' : 'Your Bag'}
+                  </h2>
+                  <p className="text-[10px] uppercase tracking-widest text-brand-dark/40 mt-1">
+                    {showCheckoutForm ? 'Secure Checkout' : `${cartCount} items selected`}
+                  </p>
+                </div>
+                <button onClick={() => { setCartOpen(false); setShowCheckoutForm(false); }} className="p-2 hover:bg-brand-cream transition-colors text-brand-dark">
+                  <X size={24} strokeWidth={1} />
+                </button>
+              </div>
+
+              <div className="flex-grow overflow-y-auto p-8">
+                {showCheckoutForm ? (
+                  <motion.form 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    onSubmit={handleCheckout} 
+                    className="space-y-6"
+                  >
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60 block">Full Name</label>
+                      <input 
+                        required
+                        type="text" 
+                        value={customerInfo.name}
+                        onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
+                        placeholder="Required for collection" 
+                        className="w-full bg-white border border-brand-border px-4 py-3.5 focus:outline-none focus:border-brand-primary transition-colors text-sm text-brand-dark" 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60 block">Email Address</label>
+                      <input 
+                        required
+                        type="email" 
+                        value={customerInfo.email}
+                        onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+                        placeholder="Order confirmation will be sent here" 
+                        className="w-full bg-white border border-brand-border px-4 py-3.5 focus:outline-none focus:border-brand-primary transition-colors text-sm text-brand-dark" 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60 block">WhatsApp / Phone</label>
+                      <input 
+                        required
+                        type="tel" 
+                        value={customerInfo.phone}
+                        onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
+                        placeholder="+92 XXX XXXXXXX" 
+                        className="w-full bg-white border border-brand-border px-4 py-3.5 focus:outline-none focus:border-brand-primary transition-colors text-sm text-brand-dark" 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-dark/60 block">Full Delivery Address</label>
+                      <textarea 
+                        required
+                        value={customerInfo.address}
+                        onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
+                        placeholder="House #, Street, City, ZIP" 
+                        className="w-full bg-white border border-brand-border px-4 py-3.5 focus:outline-none focus:border-brand-primary transition-colors text-sm h-32 resize-none text-brand-dark" 
+                      />
+    
